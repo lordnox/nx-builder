@@ -9,7 +9,7 @@ module.exports = function() {
     // these are default values anyway
     singleRun: false,
     colors: true,
-    
+
     files : [
       //3rd Party Code
       'bower_components/angular/angular.js',
@@ -23,6 +23,8 @@ module.exports = function() {
       'app/scripts/directives/**/*.js',
       'app/scripts/controllers/**/*.js',
       'app/scripts/filters/**/*.js',
+      'app/scripts/modules/*/app.js',     //Load all modules, we want to run all tests
+      'app/scripts/modules/*/*/*.js',     //Load all modules, we want to run all tests
       'app/scripts/config/routes.js',
       'app/scripts/app.js',
 

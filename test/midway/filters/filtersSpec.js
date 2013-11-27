@@ -5,7 +5,7 @@ describe("Midway: Testing Filters", function() {
 
   var tester;
   beforeEach(function() {
-    tester = ngMidwayTester('App');
+    tester = ngMidwayTester('app');
   });
 
   afterEach(function() {
@@ -24,7 +24,7 @@ describe("Midway: Testing Filters", function() {
 
     var scope = tester.rootScope().$new();
     tester.compile(element, scope);
-    
+
     var elm = element[0];
     setTimeout(function() {
       var kids = elm.getElementsByTagName('div');

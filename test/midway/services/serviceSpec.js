@@ -8,7 +8,7 @@ describe("Midway: Testing Services", function() {
     if(tester) {
       tester.destroy();
     }
-    tester = ngMidwayTester('App');
+    tester = ngMidwayTester('app');
   });
 
   it('should perform a JSONP operation to youtube and fetch data', function(done) {

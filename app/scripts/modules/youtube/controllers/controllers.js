@@ -1,4 +1,6 @@
-angular.module('App.Controllers', [])
+console.log('loading youtube:controllers');
+
+angular.module('youtube')
 
   .run(['$rootScope', '$appScope', function($rootScope, $appScope) {
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
@@ -88,3 +90,4 @@ angular.module('App.Controllers', [])
       });
     });
   }]);
+

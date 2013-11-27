@@ -4,7 +4,7 @@
 describe("Midway: Testing Templates", function() {
 
   it("should load the template for the videos page properly", function(done) {
-    var tester = ngMidwayTester('App');
+    var tester = ngMidwayTester('app');
     tester.visit('/videos?123', function() {
       var current = tester.inject('$route').current;
       var controller = current.controller;

@@ -8,7 +8,7 @@ describe("Midway: Testing Requests", function() {
     if(tester) {
       tester.destroy();
     }
-    tester = ngMidwayTester('App');
+    tester = ngMidwayTester('app');
   });
 
   it("should goto the videos_path by default", function(done) {

@@ -5,7 +5,7 @@ describe("Midway: Testing Directives", function() {
 
   var tester;
   beforeEach(function() {
-    tester = ngMidwayTester('App');
+    tester = ngMidwayTester('app');
   });
 
   afterEach(function() {

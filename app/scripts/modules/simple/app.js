@@ -1,3 +1,5 @@
 var app = angular.module('simple', []);
 
-throw new Error('Noxteststring');
+app.controller('simpleCtrl', function($scope) {
+  $scope.test = 'this is a simple Test Controller';
+});

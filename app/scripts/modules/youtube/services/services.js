@@ -1,4 +1,6 @@
-angular.module('App.Services', [])
+console.log('loading youtube:services');
+
+angular.module('youtube')
 
   .factory('$appTimer', function() {
 
@@ -8,7 +10,7 @@ angular.module('App.Services', [])
     return function(fn) {
       clearTimeout(_timer);
       _timer = setTimeout(function() {
-        fn(); 
+        fn();
       }, _delay);
     };
   })
@@ -328,4 +330,6 @@ angular.module('App.Services', [])
 
     };
 
-  }]);
+  }])
+
+;

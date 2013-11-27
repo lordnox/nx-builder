@@ -1,4 +1,6 @@
-angular.module('App.Directives', [])
+console.log('loading youtube:directives');
+
+angular.module('youtube')
 
   .directive('appWelcome', function() {
     return function($scope, element, attrs) {

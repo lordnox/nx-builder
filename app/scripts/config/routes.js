@@ -12,6 +12,11 @@ angular.module('App.Routes', [])
       }
     }
 
+    ROUTER.when('simple_path', '/simple', {
+      controller : 'simpleCtrl',
+      templateUrl : CONFIG.prepareModuleTemplateUrl('simple', 'home')
+    });
+
     ROUTER.when('videos_path', '/videos', {
       controller : 'VideosCtrl',
       templateUrl : CONFIG.prepareViewTemplateUrl('videos/index')
@@ -39,9 +44,9 @@ angular.module('App.Routes', [])
     });
 
     ROUTER.install($routeProvider);
-  }]).
+  }])
 
-  run(['$rootScope', '$location', function($rootScope, $location) {
+  .run(['$rootScope', '$location', function($rootScope, $location) {
     var prefix = '';
     if(!CONFIG.routing.html5Mode) {
       prefix = '#' + CONFIG.routing.prefix;

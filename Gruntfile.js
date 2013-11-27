@@ -115,13 +115,16 @@ module.exports = function(grunt) {
           'bower_components/angular-route/angular-route.js',
           'bower_components/angularjs-scope.safeapply/src/Scope.SafeApply.js',
           'app/scripts/lib/router.js',
+
+          //App-specific Code
           'app/scripts/config/config.js',
           'app/scripts/services/**/*.js',
           'app/scripts/directives/**/*.js',
           'app/scripts/controllers/**/*.js',
           'app/scripts/filters/**/*.js',
+          'app/scripts/modules/*/app.js',     //Load all modules, we want to run all tests
+          'app/scripts/modules/*/*/*.js',     //Load all modules, we want to run all tests
           'app/scripts/config/routes.js',
-          'app/scripts/modules/*/app.js',
           'app/scripts/app.js',
         ]
       }
@@ -147,6 +150,9 @@ module.exports = function(grunt) {
 
   //development
   grunt.registerTask('dev', ['install', 'concat', 'connect:devserver', 'open:devserver', 'watch:assets']);
+
+  //development
+  grunt.registerTask('dev-no', ['install', 'concat', 'connect:devserver', 'watch:assets']);
 
   //server daemon
   grunt.registerTask('serve', ['connect:webserver']);

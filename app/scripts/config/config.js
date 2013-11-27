@@ -28,6 +28,11 @@ CONFIG = {
 
   prepareViewTemplateUrl : function(url) {
     return this.viewUrlPrefix + url + this.templateFileSuffix + this.templateFileQuerystring;
+  },
+
+  moduleUrlPrefix : 'scripts/modules/',
+  prepareModuleTemplateUrl : function(module, url) {
+    return this.moduleUrlPrefix + module + '/' + templateUrlPrefix + url + this.templateFileSuffix + this.templateFileQuerystring;
   }
 
 };

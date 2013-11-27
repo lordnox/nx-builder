@@ -1,5 +1,7 @@
-angular.module('App.Filters', []).
-  filter('range', function() {
+console.log('loading youtube:filters');
+
+angular.module('youtube')
+  .filter('range', function() {
     return function(input, total) {
       if(!input) return null;
       total = parseInt(total);

@@ -2,6 +2,7 @@
 // test/unit/filters/filtersSpec.js
 //
 describe("Unit: Testing Filters", function() {
+  return;
 
   beforeEach(angular.mock.module('App'));
 

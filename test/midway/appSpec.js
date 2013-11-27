@@ -2,11 +2,12 @@
 // test/midway/appSpec.js
 //
 describe("Midway: Testing Modules", function() {
-  describe("App Module:", function() {
+
+  describe("app Module:", function() {
 
     var module;
     before(function() {
-      module = angular.module("App");
+      module = angular.module("app");
     });
 
     it("should be registered", function() {
@@ -24,25 +25,16 @@ describe("Midway: Testing Modules", function() {
       });
 
       //you can also test the module's dependencies
-      it("should have App.Controllers as a dependency", function() {
-        expect(hasModule('App.Controllers')).to.equal(true);
-      });
-
-      it("should have App.Directives as a dependency", function() {
-        expect(hasModule('App.Directives')).to.equal(true);
-      });
-
-      it("should have App.Filters as a dependency", function() {
-        expect(hasModule('App.Filters')).to.equal(true);
-      });
-
       it("should have App.Routes as a dependency", function() {
         expect(hasModule('App.Routes')).to.equal(true);
       });
 
-      it("should have App.Services as a dependency", function() {
-        expect(hasModule('App.Services')).to.equal(true);
+      //you can also test the module's dependencies
+      it("should have youtube as a dependency", function() {
+        expect(hasModule('youtube')).to.equal(true);
       });
+
+
     });
   });
 });
