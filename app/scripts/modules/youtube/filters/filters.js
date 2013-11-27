@@ -1,4 +1,3 @@
-console.log('loading youtube:filters');
 
 angular.module('youtube')
   .filter('range', function() {

@@ -2,9 +2,7 @@
 // test/unit/services/servicesSpec.js
 //
 describe("Unit: Testing Controllers", function() {
-  return;
-
-  beforeEach(angular.mock.module('App'));
+  beforeEach(angular.mock.module('app'));
 
   it('should contain an $appStorage service', inject(function($appStorage) {
     expect($appStorage).not.to.equal(null);

@@ -1,4 +1,3 @@
-console.log('loading youtube:services');
 
 angular.module('youtube')
 
@@ -96,13 +95,10 @@ angular.module('youtube')
       }
 
     };
-
   }])
 
   .factory('$appLocation', ['$location','$appScope', function($location, $scopeHelper) {
-
     return {
-
       gotoURL : function(url) {
         window.location = url;
       },
@@ -119,13 +115,10 @@ angular.module('youtube')
           $location.path(url).replace();
         }, $scope);
       }
-
     };
-
   }])
 
   .factory('$appSanitize', function() {
-
     return {
       trim : function(str) {
         return str.replace(/^\s+|\s+$/g, '');
@@ -138,8 +131,7 @@ angular.module('youtube')
         str = this.urlEncode(str);
         return str;
       }
-    }
-
+    };
   })
 
   .factory('$appYoutubeSearcher',['$appStorage','$appSanitize','$q','$http',function($storage, $sanitize, $q, $http) {
@@ -329,7 +321,5 @@ angular.module('youtube')
       }
 
     };
-
   }])
-
 ;

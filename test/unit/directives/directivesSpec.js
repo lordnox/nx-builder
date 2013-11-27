@@ -2,11 +2,10 @@
 // test/unit/directives/directivesSpec.js
 //
 describe("Unit: Testing Directives", function() {
-  return;
 
   var $compile, $rootScope;
 
-  beforeEach(angular.mock.module('App'));
+  beforeEach(angular.mock.module('app'));
 
   beforeEach(inject(
     ['$compile','$rootScope', function($c, $r) {

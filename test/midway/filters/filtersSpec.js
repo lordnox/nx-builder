@@ -2,7 +2,7 @@
 // test/midway/filters/filtersSpec.js
 //
 describe("Midway: Testing Filters", function() {
-
+  return;
   var tester;
   beforeEach(function() {
     tester = ngMidwayTester('app');

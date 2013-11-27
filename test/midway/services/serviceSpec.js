@@ -2,7 +2,7 @@
 // test/midway/services/servicesSpec.js
 //
 describe("Midway: Testing Services", function() {
-
+  return;
   var tester;
   beforeEach(function() {
     if(tester) {

@@ -2,9 +2,7 @@
 // test/unit/filters/filtersSpec.js
 //
 describe("Unit: Testing Filters", function() {
-  return;
-
-  beforeEach(angular.mock.module('App'));
+  beforeEach(angular.mock.module('app'));
 
   it('should have a range filter', inject(function($filter) {
     expect($filter('range')).not.to.equal(null);

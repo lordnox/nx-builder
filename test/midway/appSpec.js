@@ -25,16 +25,14 @@ describe("Midway: Testing Modules", function() {
       });
 
       //you can also test the module's dependencies
-      it("should have App.Routes as a dependency", function() {
-        expect(hasModule('App.Routes')).to.equal(true);
+      it("should have ui-router as a dependency", function() {
+        hasModule('ui.router').should.be.ok;
       });
 
       //you can also test the module's dependencies
       it("should have youtube as a dependency", function() {
-        expect(hasModule('youtube')).to.equal(true);
+        hasModule('youtube').should.be.ok;
       });
-
-
     });
   });
 });

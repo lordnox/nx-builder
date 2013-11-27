@@ -2,15 +2,13 @@
 // test/midway/directives/directivesSpec.js
 //
 describe("Midway: Testing Directives", function() {
-
+  return;
   var tester;
   beforeEach(function() {
+    if(tester) {
+      tester.destroy();
+    }
     tester = ngMidwayTester('app');
-  });
-
-  afterEach(function() {
-    tester.destroy();
-    tester = null;
   });
 
   it("should properly create the youtube listings with the directive in mind", function(done) {

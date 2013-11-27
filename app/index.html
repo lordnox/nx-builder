@@ -23,22 +23,23 @@
               </form>
 
               <ol class="nav">
-                <li data-ng-class="c('videos_path','active')">
-                  <a data-ng-href="{{ r('videos_path') }}">Videos</a>
+                <li ng-class="{ active: $state.includes('youtube.videos') }">
+                  <a ui-sref="youtube.videos">Videos</a>
                 </li>
-                <li data-ng-class="c('watched_videos_path','active')">
-                  <a data-ng-href="{{ r('watched_videos_path') }}">Watched Videos</a>
+                <li ng-class="{ active: $state.includes('youtube.watched') }">
+                  <a ui-sref="youtube.watched">Watched Videos</a>
                 </li>
-                <li>
-                  <a href="#/simple">Simple</a>
+                <li ng-class="{ active: $state.includes('simple') }">
+                  <a ui-sref="simple">Simple</a>
                 </li>
               </ol>
             </div>
           </div>
         </div>
       </nav>
-      <div class="container" id="ng-view">
-        <div data-ng-view></div>
+      <pre>{{$state | json}}</pre>
+      <div class="container">
+        <div ui-view></div>
       </div>
     </div>
     <footer id="footer">

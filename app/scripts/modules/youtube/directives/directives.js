@@ -1,4 +1,3 @@
-console.log('loading youtube:directives');
 
 angular.module('youtube')
 
@@ -12,7 +11,7 @@ angular.module('youtube')
   .directive('appYoutubeListing', ['$appLocation', function($appLocation) {
     return function($scope, element, attrs) {
       element.bind('click', function() {
-        var elm = $(this);
+        var elm = angular.element(this);
         var id = elm.attr('data-app-youtube-listing-id');
         var url = ROUTER.routePath('video_path', {
           id : id

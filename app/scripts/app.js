@@ -1,13 +1,18 @@
 var module = angular.module('app', [
-  'ngRoute',
-  'Scope.safeApply',
-  'App.Routes',
-  'youtube',
-  'simple'
-]);
+    'ui.router',
+    'Scope.safeApply',
+    'youtube',
+    'simple'
+  ])
 
-module.run(function() {
-  console.log('app-Module running');
-});
+  .config(function($urlRouterProvider) {
+    $urlRouterProvider.otherwise("/youtube/videos");
+  })
 
-window.App = module;
+  .run(function($rootScope, $state, $stateParams) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+  })
+;
+
+//window.App = module;

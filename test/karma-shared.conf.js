@@ -1,3 +1,34 @@
+var Path = require('path');
+
+var project = require('../project')
+  , bower = require('../bower');
+
+var base = '';
+
+var files = [];
+
+//@TODO: Read the bower.dependencies and generate the include list
+
+var addFiles = function(list, dir) {
+  var _base = base;
+  if(dir) _base = Path.join(base, dir);
+  list.forEach(function(file) {
+    files.push(Path.join(_base, file));
+  });
+};
+
+// first add bower files:
+addFiles(project.files.bower, project.bowerpath);
+
+// add 3rd party code
+addFiles(project.files["3rd"]);
+
+// add app files
+addFiles(project.files.app, project.apppath);
+
+// add test files at the end
+addFiles(project.files.test);
+
 module.exports = function() {
   return {
     basePath: '../',
@@ -10,28 +41,6 @@ module.exports = function() {
     singleRun: false,
     colors: true,
 
-    files : [
-      //3rd Party Code
-      'bower_components/angular/angular.js',
-      'bower_components/angular-route/angular-route.js',
-      'bower_components/angularjs-scope.safeapply/src/Scope.SafeApply.js',
-      'app/scripts/lib/router.js',
-
-      //App-specific Code
-      'app/scripts/config/config.js',
-      'app/scripts/services/**/*.js',
-      'app/scripts/directives/**/*.js',
-      'app/scripts/controllers/**/*.js',
-      'app/scripts/filters/**/*.js',
-      'app/scripts/modules/*/app.js',     //Load all modules, we want to run all tests
-      'app/scripts/modules/*/*/*.js',     //Load all modules, we want to run all tests
-      'app/scripts/config/routes.js',
-      'app/scripts/app.js',
-
-      //Test-Specific Code
-      'node_modules/chai/chai.js',
-      'test/lib/chai-should.js',
-      'test/lib/chai-expect.js'
-    ]
+    files : files
   }
 };

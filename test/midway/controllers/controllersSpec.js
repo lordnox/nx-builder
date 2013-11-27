@@ -2,7 +2,7 @@
 // test/midway/controllers/controllersSpec.js
 //
 describe("Midway: Testing Controllers", function() {
-
+  return;
   var tester;
   beforeEach(function() {
     if(tester) {

@@ -1,3 +1,35 @@
+
+var Path = require('path');
+
+var project = require('./project')
+  , bower = require('./bower');
+
+var base = '';
+
+var jsFiles = [], cssFiles = [];
+
+//@TODO: Read the bower.dependencies and generate the include list
+
+var addFiles = function(files, list, dir) {
+  var _base = base;
+  if(dir) _base = Path.join(base, dir);
+  list.forEach(function(file) {
+    files.push(Path.join(_base, file));
+  });
+};
+
+// first add bower files:
+addFiles(jsFiles, project.files.bower, project.bowerpath);
+
+// add 3rd party code
+addFiles(jsFiles, project.files["3rd"]);
+
+// add app files
+addFiles(jsFiles, project.files.app, project.apppath);
+
+// add styles
+addFiles(cssFiles, project.files.styles);
+
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-shell');
@@ -29,24 +61,24 @@ module.exports = function(grunt) {
       },
       webserver: {
         options: {
-          port: 8888,
+          port: project.server.devPort,
           keepalive: true
         }
       },
       devserver: {
         options: {
-          port: 8888
+          port: project.server.devPort
         }
       },
       testserver: {
         options: {
-          port: 9999
+          port: project.server.testPort
         }
       },
       coverage: {
         options: {
           base: 'coverage/',
-          port: 5555,
+          port: project.server.coveragePort,
           keepalive: true
         }
       }
@@ -54,10 +86,10 @@ module.exports = function(grunt) {
 
     open: {
       devserver: {
-        path: 'http://localhost:8888'
+        path: 'http://localhost:project.server.devPort'
       },
       coverage: {
-        path: 'http://localhost:5555'
+        path: 'http://localhost:' + project.server.coveragePort
       }
     },
 
@@ -98,35 +130,14 @@ module.exports = function(grunt) {
     concat: {
       styles: {
         dest: './app/assets/app.css',
-        src: [
-          'app/styles/reset.css',
-          'bower_components/components-font-awesome/css/font-awesome.css',
-          'bower_components/bootstrap.css/css/bootstrap.css',
-          'app/styles/app.css'
-        ]
+        src: cssFiles
       },
       scripts: {
         options: {
           separator: ';'
         },
         dest: './app/assets/app.js',
-        src: [
-          'bower_components/angular/angular.js',
-          'bower_components/angular-route/angular-route.js',
-          'bower_components/angularjs-scope.safeapply/src/Scope.SafeApply.js',
-          'app/scripts/lib/router.js',
-
-          //App-specific Code
-          'app/scripts/config/config.js',
-          'app/scripts/services/**/*.js',
-          'app/scripts/directives/**/*.js',
-          'app/scripts/controllers/**/*.js',
-          'app/scripts/filters/**/*.js',
-          'app/scripts/modules/*/app.js',     //Load all modules, we want to run all tests
-          'app/scripts/modules/*/*/*.js',     //Load all modules, we want to run all tests
-          'app/scripts/config/routes.js',
-          'app/scripts/app.js',
-        ]
+        src: jsFiles
       }
     }
   });
