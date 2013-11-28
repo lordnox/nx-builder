@@ -45,7 +45,7 @@ angular.module('youtube')
     $scope.onReady();
   }])
 
-  .controller('VideosCtrl', ['$appYoutubeSearcher', '$location', '$appStorage', '$scope', '$routeParams', function($youtube, $location, $storage, $scope, $params) {
+  .controller('VideosCtrl', ['$appYoutubeSearcher', '$location', '$appStorage', '$stateParams', '$scope', function($youtube, $location, $storage, $params, $scope) {
     $scope.current_path = '#' + $location.url();
     if($params.q) {
       $scope.q = $params.q;
@@ -65,7 +65,7 @@ angular.module('youtube')
     $scope.other_status = 'success'
   }])
 
-  .controller('WatchedVideosCtrl', ['$appYoutubeSearcher','$appStorage', '$scope', '$routeParams', function($youtube, $storage, $scope, $params) {
+  .controller('WatchedVideosCtrl', ['$appYoutubeSearcher','$appStorage', '$scope', function($youtube, $storage, $scope) {
     $scope.videos = $youtube.getWatchedVideos();
     $scope.sortFn = function(entry) {
       return entry.timestamp;
@@ -73,7 +73,7 @@ angular.module('youtube')
     $scope.onReady();
   }])
 
-  .controller('VideoCtrl', ['$appYoutubeSearcher','$compile', '$rootScope', '$routeParams', '$scope',function($youtube, $compile, $rootScope, $params, $scope) {
+  .controller('VideoCtrl', ['$appYoutubeSearcher','$compile', '$rootScope', '$stateParams', '$scope',function($youtube, $compile, $rootScope, $params, $scope) {
     var id = $params.id;
     $youtube.findVideo(id, true, function(id, video) {
       $scope.video_id = id;

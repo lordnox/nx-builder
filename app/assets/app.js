@@ -21099,14 +21099,14 @@ angular.module('ui.router.compat', ['ui.router']);
  */
 $Resolve.$inject = ['$q', '$injector'];
 function $Resolve(  $q,    $injector) {
-  
+
   var VISIT_IN_PROGRESS = 1,
       VISIT_DONE = 2,
       NOTHING = {},
       NO_DEPENDENCIES = [],
       NO_LOCALS = NOTHING,
       NO_PARENT = extend($q.when(NOTHING), { $$promises: NOTHING, $$values: NOTHING });
-  
+
 
   /**
    * Studies a set of invocables that are likely to be used multiple times.
@@ -21121,19 +21121,19 @@ function $Resolve(  $q,    $injector) {
    */
   this.study = function (invocables) {
     if (!isObject(invocables)) throw new Error("'invocables' must be an object");
-    
+
     // Perform a topological sort of invocables to build an ordered plan
     var plan = [], cycle = [], visited = {};
     function visit(value, key) {
       if (visited[key] === VISIT_DONE) return;
-      
+
       cycle.push(key);
       if (visited[key] === VISIT_IN_PROGRESS) {
         cycle.splice(0, cycle.indexOf(key));
         throw new Error("Cyclic dependency: " + cycle.join(" -> "));
       }
       visited[key] = VISIT_IN_PROGRESS;
-      
+
       if (isString(value)) {
         plan.push(key, [ function() { return $injector.get(key); }], NO_DEPENDENCIES);
       } else {
@@ -21143,17 +21143,17 @@ function $Resolve(  $q,    $injector) {
         });
         plan.push(key, value, params);
       }
-      
+
       cycle.pop();
       visited[key] = VISIT_DONE;
     }
     forEach(invocables, visit);
     invocables = cycle = visited = null; // plan is all that's required
-    
+
     function isResolve(value) {
       return isObject(value) && value.then && value.$$promises;
     }
-    
+
     return function (locals, parent, self) {
       if (isResolve(locals) && self === undefined) {
         self = parent; parent = locals; locals = null;
@@ -21161,12 +21161,12 @@ function $Resolve(  $q,    $injector) {
       if (!locals) locals = NO_LOCALS;
       else if (!isObject(locals)) {
         throw new Error("'locals' must be an object");
-      }       
+      }
       if (!parent) parent = NO_PARENT;
       else if (!isResolve(parent)) {
         throw new Error("'parent' must be a promise returned by $resolve.resolve()");
       }
-      
+
       // To complete the overall resolution, we have to wait for the parent
       // promise and for the promise for each invokable in our plan.
       var resolution = $q.defer(),
@@ -21175,28 +21175,28 @@ function $Resolve(  $q,    $injector) {
           values = extend({}, locals),
           wait = 1 + plan.length/3,
           merged = false;
-          
+
       function done() {
         // Merge parent values we haven't got yet and publish our own $$values
         if (!--wait) {
-          if (!merged) merge(values, parent.$$values); 
+          if (!merged) merge(values, parent.$$values);
           result.$$values = values;
           result.$$promises = true; // keep for isResolve()
           resolution.resolve(values);
         }
       }
-      
+
       function fail(reason) {
         result.$$failure = reason;
         resolution.reject(reason);
       }
-      
+
       // Short-circuit if parent has already failed
       if (isDefined(parent.$$failure)) {
         fail(parent.$$failure);
         return result;
       }
-      
+
       // Merge parent values if the parent has already resolved, or merge
       // parent promises and wait if the parent resolve is still in progress.
       if (parent.$$values) {
@@ -21206,13 +21206,13 @@ function $Resolve(  $q,    $injector) {
         extend(promises, parent.$$promises);
         parent.then(done, fail);
       }
-      
+
       // Process each invocable in the plan, but ignore any where a local of the same name exists.
       for (var i=0, ii=plan.length; i<ii; i+=3) {
         if (locals.hasOwnProperty(plan[i])) done();
         else invoke(plan[i], plan[i+1], plan[i+2]);
       }
-      
+
       function invoke(key, invocable, params) {
         // Create a deferred for this invocation. Failures will propagate to the resolution as well.
         var invocation = $q.defer(), waitParams = 0;
@@ -21247,11 +21247,11 @@ function $Resolve(  $q,    $injector) {
         // Publish promise synchronously; invocations further down in the plan may depend on it.
         promises[key] = invocation.promise;
       }
-      
+
       return result;
     };
   };
-  
+
   /**
    * Resolves a set of invocables. An invocable is a function to be invoked via `$injector.invoke()`,
    * and can have an arbitrary number of dependencies. An invocable can either return a value directly,
@@ -21274,7 +21274,7 @@ function $Resolve(  $q,    $injector) {
    * returned by an invocable is rejected, the `$resolve` promise is immediately rejected with the same error.
    * A rejection of a `parent` promise (if specified) will likewise be propagated immediately. Once the
    * `$resolve` promise has been rejected, no further invocables will be called.
-   * 
+   *
    * Cyclic dependencies between invocables are not permitted and will caues `$resolve` to throw an
    * error. As a special case, an injectable can depend on a parameter with the same name as the injectable,
    * which will be fulfilled from the `parent` injectable of the same name. This allows inherited values
@@ -21319,7 +21319,7 @@ $TemplateFactory.$inject = ['$http', '$templateCache', '$injector'];
 function $TemplateFactory(  $http,   $templateCache,   $injector) {
 
   /**
-   * Creates a template from a configuration object. 
+   * Creates a template from a configuration object.
    * @function
    * @name $templateFactory#fromConfig
    * @methodOf $templateFactory
@@ -21401,7 +21401,7 @@ angular.module('ui.router.util').service('$templateFactory', $TemplateFactory);
  * of search parameters. Multiple search parameter names are separated by '&'. Search parameters
  * do not influence whether or not a URL is matched, but their values are passed through into
  * the matched parameters returned by {@link UrlMatcher#exec exec}.
- * 
+ *
  * Path parameter placeholders can be specified using simple colon/catch-all syntax or curly brace
  * syntax, which optionally allows a regular expression for the parameter to be specified:
  *
@@ -21412,13 +21412,13 @@ angular.module('ui.router.util').service('$templateFactory', $TemplateFactory);
  *   curly braces, they must be in matched pairs or escaped with a backslash.
  *
  * Parameter names may contain only word characters (latin letters, digits, and underscore) and
- * must be unique within the pattern (across both path and search parameters). For colon 
+ * must be unique within the pattern (across both path and search parameters). For colon
  * placeholders or curly placeholders without an explicit regexp, a path parameter matches any
  * number of characters other than '/'. For catch-all placeholders the path parameter matches
  * any number of characters.
- * 
+ *
  * ### Examples
- * 
+ *
  * * '/hello/' - Matches only if the path is exactly '/hello/'. There is no special treatment for
  *   trailing slashes, and patterns have to match the entire path, not just a prefix.
  * * '/user/:id' - Matches '/user/bob' or '/user/1234!!!' or even '/user/' but not '/user' or
@@ -21655,7 +21655,7 @@ angular.module('ui.router.util').provider('$urlMatcherFactory', $UrlMatcherFacto
 
 $UrlRouterProvider.$inject = ['$urlMatcherFactoryProvider'];
 function $UrlRouterProvider(  $urlMatcherFactory) {
-  var rules = [], 
+  var rules = [],
       otherwise = null;
 
   // Returns a string that is a prefix of all strings matching the RegExp
@@ -22535,113 +22535,59 @@ angular.module('Scope.safeApply', []).run(function($rootScope) {
   };
 
 });
-;var ROUTER;
+;angular.module('configuration', [])
+  .provider('config', function() {
+    var appPrefix = '/';
+    var templateUrlPrefix = 'templates/';
+    var appVersion = 8;
 
-(function() {
-  var lookup = {};
-  var otherwiseLookup = null;
+    var config = {
 
-  ROUTER = {
+      version : appVersion,
 
-    when : function(key, url, params) {
-      lookup[key] = {
-        url : url,
-        params : params
-      };
-    },
+      baseDirectory : appPrefix,
+      templateDirectory : templateUrlPrefix,
+      templateFileQuerystring : "?v=" + appVersion,
 
-    alias : function(key1, key2) {
-      lookup[key1] = lookup[key2];
-    },
+      routing : {
+        prefix : '',
+        html5Mode : false
+      },
 
-    otherwise : function(params) {
-      otherwiseLookup = params;
-    },
+      viewUrlPrefix : templateUrlPrefix + 'views/',
+      partialUrlPrefix : templateUrlPrefix + 'partials/',
 
-    replaceUrlParams : function(url, params) {
-      for(var k in params) {
-        var v = params[k];
-        url = url.replace(':'+k,v);
+      templateFileSuffix : '_tpl.html',
+
+      prepareViewTemplateUrl : function(url) {
+        return config.viewUrlPrefix + url + config.templateFileSuffix + config.templateFileQuerystring;
+      },
+
+      moduleUrlPrefix : 'scripts/modules/',
+      prepareModuleTemplateUrl : function(module, url) {
+        return config.moduleUrlPrefix + module + '/' + templateUrlPrefix + url + config.templateFileSuffix + config.templateFileQuerystring;
       }
-      return url;
-    },
-
-    routeDefined : function(key) {
-      return !! this.getRoute(key);
-    },
-
-    getRoute : function(key, args) {
-      return lookup[key];
-    },
-
-    routePath : function(key, args) {
-      var url = this.getRoute(key);
-      url = url ? url.url : null;
-      if(url && args) {
-        url = this.replaceUrlParams(url, args);
-      };
-      return url;
-    },
-
-    install : function($routeProvider) {
-      for(var key in lookup) {
-        var route = lookup[key];
-        var url = route['url'];
-        var params = route['params'];
-        $routeProvider.when(url, params);
-      };
-      if(otherwiseLookup) {
-        $routeProvider.otherwise(otherwiseLookup);
-      }
-    }
-  };
-
-})();
-;var CONFIG;
-
-(function() {
-
-var appPrefix = '/';
-var templateUrlPrefix = 'templates/';
-var appVersion = 8;
-
-CONFIG = {
-
-  version : appVersion,
-
-  baseDirectory : appPrefix,
-  templateDirectory : templateUrlPrefix,
-  templateFileQuerystring : "?v=" + appVersion,
-
-  routing : {
-
-    prefix : '',
-    html5Mode : false
-
-  },
-
-  viewUrlPrefix : templateUrlPrefix + 'views/',
-  partialUrlPrefix : templateUrlPrefix + 'partials/',
-
-  templateFileSuffix : '_tpl.html',
-
-  prepareViewTemplateUrl : function(url) {
-    return this.viewUrlPrefix + url + this.templateFileSuffix + this.templateFileQuerystring;
-  },
-
-  moduleUrlPrefix : 'scripts/modules/',
-  prepareModuleTemplateUrl : function(module, url) {
-    return this.moduleUrlPrefix + module + '/' + templateUrlPrefix + url + this.templateFileSuffix + this.templateFileQuerystring;
-  }
-
-};
-
-})();
+    };
+    return {
+      $get: function() {
+        return config;
+      },
+      prepareModuleTemplateUrl: config.prepareModuleTemplateUrl,
+      prepareViewTemplateUrl: config.prepareViewTemplateUrl,
+      set: function(key, value) {
+        config[key] = value;
+      },
+      config: config
+    };
+  })
+;
 ;var app = angular.module('simple', []);
 
 app.controller('simpleCtrl', function($scope) {
   $scope.test = 'this is a simple Test Controller';
-});;var app = angular.module('youtube', []);
+});;
+
+var app = angular.module('youtube', ['configuration']);
 
     // ROUTER.when('videos_path', '/videos', {
     //   controller : 'VideosCtrl',
@@ -22659,29 +22605,31 @@ app.controller('simpleCtrl', function($scope) {
     // });
 
 
-app.config(function ($stateProvider) {
+app.config(function ($stateProvider, configProvider) {
+
   $stateProvider
     .state('youtube', {
-      abstract: true,
+      //abstract: true,
       url: '/youtube',
       data: {
         menuTitle: 'Youtube - Module'
-      }
+      },
+      template: '<ui-view/>'
     })
     .state('youtube.videos', {
       url: '/videos',
       controller: 'VideosCtrl',
-      templateUrl: CONFIG.prepareViewTemplateUrl('videos/index')
+      templateUrl: configProvider.prepareViewTemplateUrl('videos/index')
     })
     .state('youtube.video', {
       url: '/video/:id',
       controller: 'VideoCtrl',
-      templateUrl: CONFIG.prepareViewTemplateUrl('videos/show')
+      templateUrl: configProvider.prepareViewTemplateUrl('videos/show')
     })
     .state('youtube.watched', {
       url: '/watched-videos',
       controller: 'WatchedVideosCtrl',
-      templateUrl: CONFIG.prepareViewTemplateUrl('videos/watched_videos')
+      templateUrl: configProvider.prepareViewTemplateUrl('videos/watched_videos')
     });
 });
 ;var app = angular.module('simple');
@@ -22732,7 +22680,7 @@ angular.module('youtube')
     $scope.onReady();
   }])
 
-  .controller('VideosCtrl', ['$appYoutubeSearcher', '$location', '$appStorage', '$scope', '$routeParams', function($youtube, $location, $storage, $scope, $params) {
+  .controller('VideosCtrl', ['$appYoutubeSearcher', '$location', '$appStorage', '$stateParams', '$scope', function($youtube, $location, $storage, $params, $scope) {
     $scope.current_path = '#' + $location.url();
     if($params.q) {
       $scope.q = $params.q;
@@ -22752,7 +22700,7 @@ angular.module('youtube')
     $scope.other_status = 'success'
   }])
 
-  .controller('WatchedVideosCtrl', ['$appYoutubeSearcher','$appStorage', '$scope', '$routeParams', function($youtube, $storage, $scope, $params) {
+  .controller('WatchedVideosCtrl', ['$appYoutubeSearcher','$appStorage', '$scope', function($youtube, $storage, $scope) {
     $scope.videos = $youtube.getWatchedVideos();
     $scope.sortFn = function(entry) {
       return entry.timestamp;
@@ -22760,7 +22708,7 @@ angular.module('youtube')
     $scope.onReady();
   }])
 
-  .controller('VideoCtrl', ['$appYoutubeSearcher','$compile', '$rootScope', '$routeParams', '$scope',function($youtube, $compile, $rootScope, $params, $scope) {
+  .controller('VideoCtrl', ['$appYoutubeSearcher','$compile', '$rootScope', '$stateParams', '$scope',function($youtube, $compile, $rootScope, $params, $scope) {
     var id = $params.id;
     $youtube.findVideo(id, true, function(id, video) {
       $scope.video_id = id;
@@ -23144,81 +23092,27 @@ angular.module('youtube')
     };
   }])
 ;
-;angular.module('App.Routes', [])
-
-  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-
-    if(CONFIG.routing.html5Mode) {
-      $locationProvider.html5Mode(true);
-    }
-    else {
-      var routingPrefix = CONFIG.routing.prefix;
-      if(routingPrefix && routingPrefix.length > 0) {
-        $locationProvider.hashPrefix(routingPrefix);
-      }
-    }
-
-    ROUTER.when('simple_path', '/simple', {
-      controller : 'simpleCtrl',
-      templateUrl : CONFIG.prepareModuleTemplateUrl('simple', 'home')
-    });
-
-    ROUTER.when('videos_path', '/videos', {
-      controller : 'VideosCtrl',
-      templateUrl : CONFIG.prepareViewTemplateUrl('videos/index')
-    });
-
-    ROUTER.when('video_path', '/videos/:id', {
-      controller : 'VideoCtrl',
-      templateUrl : CONFIG.prepareViewTemplateUrl('videos/show')
-    });
-
-    ROUTER.when('watched_videos_path', '/watched-videos', {
-      controller : 'WatchedVideosCtrl',
-      templateUrl : CONFIG.prepareViewTemplateUrl('videos/watched_videos')
-    });
-
-    ROUTER.when('other_path', '/other', {
-      controller : 'OtherCtrl',
-      templateUrl : CONFIG.prepareViewTemplateUrl('other/index')
-    });
-
-    ROUTER.alias('home_path', 'videos_path');
-
-    ROUTER.otherwise({
-      redirectTo : '/videos'
-    });
-
-    ROUTER.install($routeProvider);
-  }])
-
-  .run(['$rootScope', '$location', function($rootScope, $location) {
-    var prefix = '';
-    if(!CONFIG.routing.html5Mode) {
-      prefix = '#' + CONFIG.routing.prefix;
-    }
-    $rootScope.route = function(url, args) {
-      return prefix + ROUTER.routePath(url, args);
-    };
-
-    $rootScope.r = $rootScope.route;
-
-    $rootScope.c = function(route, value) {
-      var url = ROUTER.routePath(route);
-      if(url == $location.path()) {
-        return value;
-      }
-    };
-  }]);
-;var module = angular.module('app', [
+;
+var module = angular.module('app', [
     'ui.router',
     'Scope.safeApply',
+    'configuration',
     'youtube',
     'simple'
   ])
 
-  .config(function($urlRouterProvider) {
+  .config(function($locationProvider, $urlRouterProvider, configProvider) {
     $urlRouterProvider.otherwise("/youtube/videos");
+    var config = configProvider.config;
+    if(config.routing.html5Mode) {
+      $locationProvider.html5Mode(true);
+    }
+    else {
+      var routingPrefix = config.routing.prefix;
+      if(routingPrefix && routingPrefix.length > 0) {
+        $locationProvider.hashPrefix(routingPrefix);
+      }
+    }
   })
 
   .run(function($rootScope, $state, $stateParams) {

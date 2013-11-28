@@ -1,4 +1,6 @@
-var app = angular.module('youtube', []);
+
+
+var app = angular.module('youtube', ['configuration']);
 
     // ROUTER.when('videos_path', '/videos', {
     //   controller : 'VideosCtrl',
@@ -16,28 +18,30 @@ var app = angular.module('youtube', []);
     // });
 
 
-app.config(function ($stateProvider) {
+app.config(function ($stateProvider, configProvider) {
+
   $stateProvider
     .state('youtube', {
-      abstract: true,
+      //abstract: true,
       url: '/youtube',
       data: {
         menuTitle: 'Youtube - Module'
-      }
+      },
+      template: '<ui-view/>'
     })
     .state('youtube.videos', {
       url: '/videos',
       controller: 'VideosCtrl',
-      templateUrl: CONFIG.prepareViewTemplateUrl('videos/index')
+      templateUrl: configProvider.prepareViewTemplateUrl('videos/index')
     })
     .state('youtube.video', {
       url: '/video/:id',
       controller: 'VideoCtrl',
-      templateUrl: CONFIG.prepareViewTemplateUrl('videos/show')
+      templateUrl: configProvider.prepareViewTemplateUrl('videos/show')
     })
     .state('youtube.watched', {
       url: '/watched-videos',
       controller: 'WatchedVideosCtrl',
-      templateUrl: CONFIG.prepareViewTemplateUrl('videos/watched_videos')
+      templateUrl: configProvider.prepareViewTemplateUrl('videos/watched_videos')
     });
 });

@@ -9,16 +9,13 @@ describe("Midway: Testing Routes", function() {
       tester.destroy();
     }
     tester = ngMidwayTester('app', {
-      template : '<div>' +
-           '  <div ui-view></div>' +
-           '</div>'
+      template : '<div><div ui-view></div></div>'
     });
   });
 
   it("should reroute '/' to '/videos'", function(done) {
     tester.visit("/", function() {
       tester.path().should.be.equal("/youtube/videos");
-      console.log(tester.rootElement());
       done();
     });
   });

@@ -5,17 +5,13 @@
     "testPort": 9999
   },
   "bowerpath": "bower_components",
+  "appbase": "app",
   "apppath": "app/scripts",
   "files": {
     "app": [
-        "config/config.js"
-      , "services/**/*.js"
-      , "directives/**/*.js"
-      , "controllers/**/*.js"
-      , "filters/**/*.js"
+        "modules/*/module.js"
       , "modules/*/app.js"
       , "modules/*/*/*.js"
-      , "config/routes.js"
       , "app.js"
     ],
     "bower": [
@@ -25,7 +21,6 @@
       "angularjs-scope.safeapply/src/Scope.SafeApply.js"
     ],
     "3rd": [
-      "app/scripts/lib/router.js"
     ],
     "test": [
       "node_modules/chai/chai.js",
