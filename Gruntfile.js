@@ -32,12 +32,14 @@ addFiles(cssFiles, project.files.styles);
 
 module.exports = function(grunt) {
 
-  grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-open');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-karma');
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+  // grunt.loadNpmTasks('grunt-shell');
+  // grunt.loadNpmTasks('grunt-open');
+  // grunt.loadNpmTasks('grunt-contrib-watch');
+  // grunt.loadNpmTasks('grunt-contrib-concat');
+  // grunt.loadNpmTasks('grunt-contrib-connect');
+  // grunt.loadNpmTasks('grunt-karma');
 
   grunt.initConfig({
     shell: {
@@ -158,6 +160,10 @@ module.exports = function(grunt) {
 
   //defaults
   grunt.registerTask('default',   ['dev']);
+
+  grunt.registerTask('build',     function() {
+    console.log('build process')
+  });
 
   //development
   grunt.registerTask('dev',       ['install', 'concat', 'connect:devserver', 'open:devserver', 'watch:assets']);

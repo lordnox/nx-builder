@@ -1,5 +1,15 @@
-var app = angular.module('simple', []);
+var app = angular.module('simple', [])
 
-app.controller('simpleCtrl', function($scope) {
-  $scope.test = 'this is a simple Test Controller';
-});
+  .config(function ($stateProvider, configProvider) {
+
+    $stateProvider
+      .state('simple', {
+        url: '/simple',
+        data: {
+          menuTitle: 'Simple Page'
+        },
+        templateUrl: configProvider.prepareViewTemplateUrl('other/index')
+      })
+  });
+
+

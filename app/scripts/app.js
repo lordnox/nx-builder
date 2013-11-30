@@ -3,6 +3,7 @@ var module = angular.module('app', [
     'ui.router',
     'Scope.safeApply',
     'configuration',
+    'home',
     'youtube',
     'simple'
   ])

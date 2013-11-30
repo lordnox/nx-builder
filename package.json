@@ -1,5 +1,5 @@
 {
-  "name": "yom-angularjs-testing-article",
+  "name": "nx-",
   "version": "0.0.0",
   "repository": {
     "type": "git",
@@ -7,7 +7,8 @@
   },
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
-    "test": "grunt test:unit"
+    "test": "grunt test:unit",
+    "builder": "grunt build"
   },
   "homepage": "https://github.com/yearofmoo/YOM-AngularJS-Testing-Article",
   "devDependencies": {
@@ -35,6 +36,7 @@
     "grunt-karma": "~0.6.2",
     "grunt-open": "~0.2.2",
     "ng-midway-tester": "2.0.5",
-    "bower": "~1.2.7"
+    "bower": "~1.2.7",
+    "matchdep": "~0.3.0"
   }
 }

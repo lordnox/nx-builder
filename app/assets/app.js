@@ -22581,58 +22581,96 @@ angular.module('Scope.safeApply', []).run(function($rootScope) {
     };
   })
 ;
-;var app = angular.module('simple', []);
+;var app = angular.module('home', [])
 
-app.controller('simpleCtrl', function($scope) {
-  $scope.test = 'this is a simple Test Controller';
-});;
+  .config(function ($stateProvider, configProvider) {
 
-var app = angular.module('youtube', ['configuration']);
-
-    // ROUTER.when('videos_path', '/videos', {
-    //   controller : 'VideosCtrl',
-    //   templateUrl : CONFIG.prepareViewTemplateUrl('videos/index')
-    // });
-
-    // ROUTER.when('video_path', '/videos/:id', {
-    //   controller : 'VideoCtrl',
-    //   templateUrl : CONFIG.prepareViewTemplateUrl('videos/show')
-    // });
-
-    // ROUTER.when('watched_videos_path', '/watched-videos', {
-    //   controller : 'WatchedVideosCtrl',
-    //   templateUrl : CONFIG.prepareViewTemplateUrl('videos/watched_videos')
-    // });
+    $stateProvider
+      .state('home', {
+        url: '/home',
+        data: {
+          menuTitle: 'Home Page'
+        },
+        templateUrl: configProvider.prepareViewTemplateUrl('home/index')
+      })
+  });
 
 
-app.config(function ($stateProvider, configProvider) {
+;var app = angular.module('simple', [])
 
-  $stateProvider
-    .state('youtube', {
-      //abstract: true,
-      url: '/youtube',
-      data: {
-        menuTitle: 'Youtube - Module'
-      },
-      template: '<ui-view/>'
-    })
-    .state('youtube.videos', {
-      url: '/videos',
-      controller: 'VideosCtrl',
-      templateUrl: configProvider.prepareViewTemplateUrl('videos/index')
-    })
-    .state('youtube.video', {
-      url: '/video/:id',
-      controller: 'VideoCtrl',
-      templateUrl: configProvider.prepareViewTemplateUrl('videos/show')
-    })
-    .state('youtube.watched', {
-      url: '/watched-videos',
-      controller: 'WatchedVideosCtrl',
-      templateUrl: configProvider.prepareViewTemplateUrl('videos/watched_videos')
-    });
-});
-;var app = angular.module('simple');
+  .config(function ($stateProvider, configProvider) {
+
+    $stateProvider
+      .state('simple', {
+        url: '/simple',
+        data: {
+          menuTitle: 'Simple Page'
+        },
+        templateUrl: configProvider.prepareViewTemplateUrl('other/index')
+      })
+  });
+
+
+;
+
+var app = angular.module('youtube', ['configuration'])
+
+  .config(function ($stateProvider, configProvider) {
+
+    $stateProvider
+      .state('youtube', {
+        //abstract: true,
+        url: '/youtube',
+        data: {
+          menuTitle: 'Youtube - Module'
+        },
+        template: '<ui-view/>'
+      })
+      .state('youtube.videos', {
+        url: '/videos',
+        controller: 'VideosCtrl',
+        templateUrl: configProvider.prepareViewTemplateUrl('videos/index')
+      })
+      .state('youtube.search', {
+        url: '/search/:query',
+        controller: 'SearchCtrl',
+        templateUrl: configProvider.prepareViewTemplateUrl('videos/index')
+      })
+      .state('youtube.video', {
+        url: '/video/:id',
+        controller: 'VideoCtrl',
+        templateUrl: configProvider.prepareViewTemplateUrl('videos/show')
+      })
+      .state('youtube.watched', {
+        url: '/watched-videos',
+        controller: 'WatchedVideosCtrl',
+        templateUrl: configProvider.prepareViewTemplateUrl('videos/watched_videos')
+      });
+  });
+;angular.module('youtube')
+  .controller('AppCtrl', ['$appTimer', '$rootScope', '$state', '$scope',
+    function($timer, $rootScope, $state, $scope) {
+      $scope.search = function(query, skip) {
+        var S = function() {
+          $rootScope.search = {
+            query: query
+          }
+          $state.go('youtube.search', {
+            query: encodeURIComponent(query)
+          });
+        }
+        if(skip) {
+          S();
+        }
+        else {
+          $timer(function() {
+            S();
+          });
+        }
+      };
+
+      $scope.onReady();
+    }])
 ;
 angular.module('youtube')
 
@@ -22656,50 +22694,56 @@ angular.module('youtube')
     };
   }])
 
-  .controller('AppCtrl', ['$appTimer', '$appStorage', '$location', '$scope', function($timer, $storage, $location, $scope) {
-    $scope.search = function(q, skip) {
-      var S = function() {
-        var indexPath = ROUTER.routePath('videos_path');
-        var current = $location.path();
-        if(indexPath != current) {
-          $location.path(indexPath);
-        }
-        $location.search('q',q);
-        if(!$scope.$$phase) $scope.$apply();
-      }
-      if(skip) {
-        S();
-      }
-      else {
-        $timer(function() {
-          S();
-        });
-      }
-    };
-
-    $scope.onReady();
+;;angular.module('youtube')
+  .controller('OtherCtrl', ['$scope', function($scope) {
+    $scope.other_status = 'success'
   }])
-
-  .controller('VideosCtrl', ['$appYoutubeSearcher', '$location', '$appStorage', '$stateParams', '$scope', function($youtube, $location, $storage, $params, $scope) {
-    $scope.current_path = '#' + $location.url();
-    if($params.q) {
-      $scope.q = $params.q;
+;angular.module('youtube')
+  .controller('SearchCtrl', ['$appYoutubeSearcher', '$rootScope', '$scope',
+    function($youtube, $rootScope, $scope) {
       $scope.search = true;
-    }
-    else {
-      $scope.search = false;
-      $scope.q = 'angularjs';
-    }
-    $youtube.query($scope.q, true, function(q, videos) {
+      if($rootScope.search)
+        $scope.query = $rootScope.search.query;
+      else
+        $scope.query = 'angularjs';
+      $youtube.query($scope.query, true, function(q, videos) {
+        console.log(q);
+        $scope.videos = videos;
+        $scope.onReady();
+      });
+    }])
+
+;
+angular.module('youtube')
+  .controller('VideoCtrl', ['$appYoutubeSearcher', '$stateParams', '$scope', '$sce',
+    function($youtube, $params, $scope, $sce) {
+      var id = $params.id;
+      $youtube.findVideo(id, true, function(id, video) {
+        $scope.video_id = id;
+        $scope.video = video;
+        $scope.stars = video.rating;
+
+        $youtube.addToWatchedVideos(video);
+        $scope.onReady();
+
+        $scope.video.embedUrl = $sce.trustAsResourceUrl($scope.video.embedUrl);
+
+        $youtube.query(video.title, true, function(q, videos) {
+          $scope.related = videos;
+          if(!$scope.$$phase) $scope.$apply();
+        });
+      });
+    }]);
+;angular.module('youtube')
+  .controller('VideosCtrl', ['$appYoutubeSearcher', '$location', '$appStorage', '$stateParams', '$scope', function($youtube, $location, $storage, $params, $scope) {
+    $scope.search = false;
+    $youtube.query('angularjs', true, function(q, videos) {
       $scope.videos = videos;
       $scope.onReady();
     });
   }])
 
-  .controller('OtherCtrl', ['$scope', function($scope) {
-    $scope.other_status = 'success'
-  }])
-
+;angular.module('youtube')
   .controller('WatchedVideosCtrl', ['$appYoutubeSearcher','$appStorage', '$scope', function($youtube, $storage, $scope) {
     $scope.videos = $youtube.getWatchedVideos();
     $scope.sortFn = function(entry) {
@@ -22707,24 +22751,6 @@ angular.module('youtube')
     };
     $scope.onReady();
   }])
-
-  .controller('VideoCtrl', ['$appYoutubeSearcher','$compile', '$rootScope', '$stateParams', '$scope',function($youtube, $compile, $rootScope, $params, $scope) {
-    var id = $params.id;
-    $youtube.findVideo(id, true, function(id, video) {
-      $scope.video_id = id;
-      $scope.video = video;
-      $scope.stars = video.rating;
-
-      $youtube.addToWatchedVideos(video);
-      $scope.onReady();
-
-      $youtube.query(video.title, true, function(q, videos) {
-        $scope.related = videos;
-        if(!$scope.$$phase) $scope.$apply();
-      });
-    });
-  }]);
-
 ;
 angular.module('youtube')
 
@@ -22734,21 +22760,23 @@ angular.module('youtube')
       element.html('Welcome: <strong>' + html + '</strong>');
     };
   })
+;
+angular.module('youtube')
 
-  .directive('appYoutubeListing', ['$appLocation', function($appLocation) {
+  .directive('appYoutubeListing', ['$state', function($state) {
     return function($scope, element, attrs) {
       element.bind('click', function() {
         var elm = angular.element(this);
         var id = elm.attr('data-app-youtube-listing-id');
-        var url = ROUTER.routePath('video_path', {
-          id : id
-        });
-        $appLocation.change(url, $scope);
+        $state.go('youtube.video', { id: id });
       });
     };
   }])
 
-  .directive('appYoutubeListings', ['$appLocation', function($appLocation) {
+;
+angular.module('youtube')
+
+  .directive('appYoutubeListings', [function() {
     var listingSelector = '.app-youtube-listing';
     var className = 'app-youtube-listings';
 
@@ -22770,18 +22798,59 @@ angular.module('youtube')
 ;
 angular.module('youtube')
 
-  .factory('$appTimer', function() {
-
-    var _delay = 500;
-    var _timer = -1;
-
-    return function(fn) {
-      clearTimeout(_timer);
-      _timer = setTimeout(function() {
-        fn();
-      }, _delay);
+  .factory('$appSanitize', function() {
+    return {
+      trim : function(str) {
+        return str.replace(/^\s+|\s+$/g, '');
+      },
+      urlEncode : function(str) {
+        return escape(str);
+      },
+      prepareForUrl : function(str) {
+        str = this.trim(str);
+        str = this.urlEncode(str);
+        return str;
+      }
     };
   })
+
+;;
+angular.module('youtube')
+
+  .factory('$appScope', ['$rootScope', function($rootScope) {
+
+    return {
+
+      topScope : function() {
+        return this.scope(document);
+      },
+
+      scope : function(element) {
+        return angular.element(element).scope();
+      },
+
+      rootScope : function() {
+        return $rootScope;
+      },
+
+      safeApply : function(fn, $scope) {
+        $scope = $scope || this.topScope();
+        fn = fn || function() {};
+        if($scope.$$phase) {
+          fn();
+        }
+        else {
+          $scope.$apply(function() {
+            fn();
+          });
+        }
+      }
+
+    };
+  }])
+;
+;
+angular.module('youtube')
 
   .factory('$appStorage',function() {
     var keyPrefix = 'yom-';
@@ -22834,74 +22903,26 @@ angular.module('youtube')
     };
   })
 
-  .factory('$appScope', ['$rootScope', function($rootScope) {
+;
+;
+angular.module('youtube')
 
-    return {
+  .factory('$appTimer', function() {
 
-      topScope : function() {
-        return this.scope(document);
-      },
+    var _delay = 500;
+    var _timer = -1;
 
-      scope : function(element) {
-        return angular.element(element).scope();
-      },
-
-      rootScope : function() {
-        return $rootScope;
-      },
-
-      safeApply : function(fn, $scope) {
-        $scope = $scope || this.topScope();
-        fn = fn || function() {};
-        if($scope.$$phase) {
-          fn();
-        }
-        else {
-          $scope.$apply(function() {
-            fn();
-          });
-        }
-      }
-
-    };
-  }])
-
-  .factory('$appLocation', ['$location','$appScope', function($location, $scopeHelper) {
-    return {
-      gotoURL : function(url) {
-        window.location = url;
-      },
-
-      change : function(url, $scope) {
-        $scopeHelper.safeApply(function() {
-          $location.search('');
-          $location.path(url);
-        }, $scope);
-      },
-
-      replace : function(url, $scope) {
-        $scopeHelper.safeApply(function() {
-          $location.path(url).replace();
-        }, $scope);
-      }
-    };
-  }])
-
-  .factory('$appSanitize', function() {
-    return {
-      trim : function(str) {
-        return str.replace(/^\s+|\s+$/g, '');
-      },
-      urlEncode : function(str) {
-        return escape(str);
-      },
-      prepareForUrl : function(str) {
-        str = this.trim(str);
-        str = this.urlEncode(str);
-        return str;
-      }
+    return function(fn) {
+      clearTimeout(_timer);
+      _timer = setTimeout(function() {
+        fn();
+      }, _delay);
     };
   })
+
+;
+;
+angular.module('youtube')
 
   .factory('$appYoutubeSearcher',['$appStorage','$appSanitize','$q','$http',function($storage, $sanitize, $q, $http) {
 
@@ -23091,12 +23112,14 @@ angular.module('youtube')
 
     };
   }])
+
 ;
 ;
 var module = angular.module('app', [
     'ui.router',
     'Scope.safeApply',
     'configuration',
+    'home',
     'youtube',
     'simple'
   ])

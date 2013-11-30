@@ -1,6 +1,6 @@
 {
   "server": {
-    "devPort": 8888,
+    "devPort": 8008,
     "coveragePort": 5555,
     "testPort": 9999
   },

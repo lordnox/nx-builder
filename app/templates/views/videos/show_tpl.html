@@ -1,11 +1,14 @@
+
+<pre>{{video | json}}</pre>
+
 <ul class="breadcrumb">
   <li>
     <span class="divider">/</span>
-    <a data-ng-href="{{ r('videos_path') }}">Videos</a>
+    <a ui-sref="youtube.videos">Videos</a>
   </li>
   <li>
     <span class="divider">/</span>
-    <a data-ng-href="{{ r('video_path', { id : video.id }) }}">{{ video.title }}</a>
+    <a ui-sref="youtube.video({ id : video.id })">{{ video.title }}</a>
   </li>
   <li style="float:right" id="app-welcome-text">
     <div data-app-welcome>User</div>
