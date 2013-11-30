@@ -97,12 +97,19 @@ module.exports = function(grunt) {
             cwd: project.appbase,
             src: [
               '**',
-              '!' + project.assetspath + '/**'
+              '!' + Path.join(project.assetspath, '**')
             ],
-            dest: project.buildpath,
+            dest: Path.join(project.buildpath, project.client),
           },
         ]
       }
+    },
+
+    'gh-pages': {
+      options: {
+        base: Path.join(project.buildpath, project.client)
+      },
+      src: ['**']
     },
 
     karma: {

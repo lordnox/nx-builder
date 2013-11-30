@@ -6,6 +6,8 @@
   },
   "bowerpath": "bower_components",
   "buildpath": "build/",
+  "client": "static",
+  "server": "server",
   "appbase": "app",
   "apppath": "app/scripts",
   "assetspath": "scripts",

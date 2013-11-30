@@ -3,4 +3,5 @@ npm-debug.log
 /bower_components
 /build
 .DS_Store
+.grunt
 libpeerconnection.log
