@@ -1,15 +1,18 @@
-# AngularJS - Testing Article
-This is a helper repository which is designed to be used alongside the blog article on yearofmoo.com.
+AngularJS based webapp repository
+=================================
 
-## Blog Article
-Click the link below to view the blog article which explains exactly what and how this application is used.
+This is a project based on a blog [article](http://www.yearofmoo.com/2013/01/full-spectrum-testing-with-angularjs-and-karma.html) and the corresponding [repository](https://github.com/yearofmoo-articles/AngularJS-Testing-Article/) from [@yearofmoo](https://github.com/yearofmoo).
+Furthermore there are parts from [ultimate-seed](http://ultimate-seed.herokuapp.com/) with its [repository](https://github.com/pilwon/ultimate-seed/).
 
-http://www.yearofmoo.com/2013/01/full-spectrum-testing-with-angularjs-and-karma.html
+The current working base will create a simple serverless webapp. It features a module structure to include different angular modules. As an example the yearofmoo app is found in `app/scripts/modules/youtube` with each base file (`directives.js`, `services.js`, `filters.js` and `controllers.js`) is now split into seperate directories.
 
-## Demo
-The Application can be demoed via:
+Demo
+-------
+The Application can be build can be visited at: http://lordnox.github.io/nx-builder/
 
-http://yearofmoo-articles.github.com/angularjs-testing-article/app/
+Why this project
+------------------------------
+I searched for the best possibility to develop test driven without much of a fuss. To develop an angular module I found that ultimate-seed does a pretty good job. It uses browserify to compile a lot of modules to be able to be usable on the client. The problem with ultimates way surfaces when trying to run automated tests which yearofmoo handles just fine.
 
 ## Using the application
 
@@ -20,41 +23,7 @@ And then be sure to install everything that the repo requires:
 `npm install`
 `bower install`
 
-### Development Mode
-
-Run the following command to start the server
-`grunt server`
-
-Then run this to watch the files and update assets
-`grunt`
-
-You can now access the website at
-`http://localhost:8000`
-
-### Test
-
-#### Single Run Tests
-
-Start the server to run e2e tests
-`grunt server`
-
-You can run individual test suites by running the commands:
-`grunt test:unit`
-`grunt test:midway`
-`grunt test:e2e`
-
-Or everything in order:
-`grunt test`
+To develop your modules TDD or BDD style:
+`grunt autotest`, `grunt autotest:midway` or `grunt autotest:e2e`
 
 
-#### Auto watching tests
-When watching tests, any save to a spec file will trigger karma to run the tests again
-for the specific test suite that is active at the time.
-
-Start the server to run e2e tests
-`grunt server`
-
-You can watch only watch one test suite a time.
-`grunt autotest:unit`
-`grunt autotest:midway`
-`grunt autotest:e2e`
