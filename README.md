@@ -1,4 +1,4 @@
-AngularJS based webapp repository
+AngularJS based webapp repository [![Build Status](https://travis-ci.org/lordnox/nx-builder.png?branch=master)](https://travis-ci.org/lordnox/nx-builder)
 =================================
 
 This is a project based on a blog [article](http://www.yearofmoo.com/2013/01/full-spectrum-testing-with-angularjs-and-karma.html) and the corresponding [repository](https://github.com/yearofmoo-articles/AngularJS-Testing-Article/) from [@yearofmoo](https://github.com/yearofmoo).
