@@ -24,6 +24,10 @@ And then be sure to install everything that the repo requires:
 `bower install`
 
 To develop your modules TDD or BDD style:
-`grunt autotest`, `grunt autotest:midway` or `grunt autotest:e2e`
+`grunt autotest` or `grunt autotest:midway`
+
+End-to-End
+----------
+I removed e2e testing from this page, I will try to integrate [grunt-selenium](https://github.com/sideroad/grunt-selenium) and the new e2e testing from angular [protractor](https://github.com/angular/protractor).
 
 

@@ -2,7 +2,6 @@
 // test/e2e/directives/directivesSpec.js
 //
 describe("E2E: Testing Directives", function() {
-
   beforeEach(function() {
     browser().navigateTo('/');
   });

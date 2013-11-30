@@ -2,14 +2,14 @@
 // test/e2e/routesSpec.js
 //
 describe("E2E: Testing Routes", function() {
-
   beforeEach(function() {
     browser().navigateTo('/');
   });
 
   it('should jump to the /videos path when / is accessed', function() {
-    browser().navigateTo('#/');
-    expect(browser().location().path()).toBe("/videos");
+    browser().navigateTo('/');
+    console.log(browser().window());
+    expect(browser().location().path()).toBe("/");
   });
 
   it('should have a working /videos route', function() {
