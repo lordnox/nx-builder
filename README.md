@@ -30,4 +30,13 @@ End-to-End
 ----------
 I removed e2e testing from this page, I will try to integrate [grunt-selenium](https://github.com/sideroad/grunt-selenium) and the new e2e testing from angular [protractor](https://github.com/angular/protractor).
 
+ToDo:
+-----
+
+- [ ] Add protractor test suite
+- [ ] Find the errors in midway testing
+- [ ] furthermore split testing into the module folders
+- [ ] write yeoman generator
+- [ ] write yeoman generator for modules
+
 
