@@ -42,18 +42,17 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-karma');
 
   grunt.initConfig({
-    shell: {
-      options : {
-        stdout: true
+    concat: {
+      styles: {
+        dest: './app/assets/app.css',
+        src: cssFiles
       },
-      npm_install: {
-        command: 'npm install'
-      },
-      bower_install: {
-        command: './node_modules/.bin/bower install'
-      },
-      font_awesome_fonts: {
-        command: 'cp -R bower_components/components-font-awesome/font app'
+      scripts: {
+        options: {
+          separator: ';'
+        },
+        dest: './app/assets/app.js',
+        src: jsFiles
       }
     },
 
@@ -86,12 +85,15 @@ module.exports = function(grunt) {
       }
     },
 
-    open: {
-      devserver: {
-        path: 'http://localhost:' + project.server.devPort
-      },
-      coverage: {
-        path: 'http://localhost:' + project.server.coveragePort
+    clean: {
+      build: ["build"],
+    },
+
+    copy: {
+      build: {
+        files: [
+          {expand: true, cwd: 'app/', src: ['**'], dest: 'build/'},
+        ]
       }
     },
 
@@ -122,24 +124,34 @@ module.exports = function(grunt) {
       }
     },
 
+    open: {
+      devserver: {
+        path: 'http://localhost:' + project.server.devPort
+      },
+      coverage: {
+        path: 'http://localhost:' + project.server.coveragePort
+      }
+    },
+
+    shell: {
+      options : {
+        stdout: true
+      },
+      npm_install: {
+        command: 'npm install'
+      },
+      bower_install: {
+        command: './node_modules/.bin/bower install'
+      },
+      font_awesome_fonts: {
+        command: 'cp -R bower_components/components-font-awesome/font app'
+      }
+    },
+
     watch: {
       assets: {
         files: ['app/styles/**/*.css','app/scripts/**'],
         tasks: ['concat']
-      }
-    },
-
-    concat: {
-      styles: {
-        dest: './app/assets/app.css',
-        src: cssFiles
-      },
-      scripts: {
-        options: {
-          separator: ';'
-        },
-        dest: './app/assets/app.js',
-        src: jsFiles
       }
     }
   });
@@ -161,9 +173,7 @@ module.exports = function(grunt) {
   //defaults
   grunt.registerTask('default',   ['dev']);
 
-  grunt.registerTask('build',     function() {
-    console.log('build process')
-  });
+  grunt.registerTask('build',     ['clean:build', 'copy:build']);
 
   //development
   grunt.registerTask('dev',       ['install', 'concat', 'connect:devserver', 'open:devserver', 'watch:assets']);
