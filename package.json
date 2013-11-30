@@ -7,8 +7,7 @@
   },
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
-    "test": "grunt test:unit",
-    "builder": "node grunter.js test:unit test:midway"
+    "test": "node grunter.js test:unit test:midway"
   },
   "homepage": "https://github.com/yearofmoo/YOM-AngularJS-Testing-Article",
   "devDependencies": {
