@@ -7,11 +7,16 @@
 // load grunt
 var grunt = require('grunt');
 
+
 // get the tasks from the command line
 var tasks = Array.prototype.slice.call(process.argv, 2);
 
 // load grunt-tasks and add the to the grunt tasks
 require('./Gruntfile')(grunt);
+
+grunt.option('verbose', true);
+
+console.log(grunt.config.data.copy.build.files)
 
 // run the build task
 grunt.tasks(tasks);

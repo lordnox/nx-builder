@@ -86,13 +86,21 @@ module.exports = function(grunt) {
     },
 
     clean: {
-      build: ["build"],
+      build: project.buildpath,
     },
 
     copy: {
       build: {
         files: [
-          {expand: true, cwd: 'app/', src: ['**'], dest: 'build/'},
+          {
+            expand: true,
+            cwd: project.appbase,
+            src: [
+              '**',
+              '!' + project.assetspath + '/**'
+            ],
+            dest: project.buildpath,
+          },
         ]
       }
     },

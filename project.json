@@ -5,8 +5,10 @@
     "testPort": 9999
   },
   "bowerpath": "bower_components",
+  "buildpath": "build/",
   "appbase": "app",
   "apppath": "app/scripts",
+  "assetspath": "scripts",
   "files": {
     "app": [
         "modules/*/module.js"
